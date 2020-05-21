@@ -30,7 +30,7 @@ books = [
     'title': 'Ham on Rye'
     }
 ]
-client = MongoClient('mongo')
+client = MongoClient('mongo', username='root', password='example')
 db = client.books
 
 db.favorites.insert_many(books)
