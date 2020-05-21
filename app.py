@@ -1,5 +1,5 @@
 import time
-from flask import Flask
+from flask import Flask, request
 from pymongo import MongoClient
 app = Flask(__name__)
 
@@ -43,6 +43,18 @@ def get_favorites():
     for entry in book_db.favorites.find():
         out += str(entry)
     return out
+
+@app.route('/add', methods=['POST'])
+def add_book():
+    new_book = request.json
+    if 'author' in new_book and 'title' in new_book:
+      book_client = MongoClient('mongo')
+      book_db = book_client.books
+      book_db.favorites.insert_one(new_book)
+      return "success"
+    else:
+      abort(400, message="Book not correctly formatted")
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=int("5000"))
