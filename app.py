@@ -39,7 +39,7 @@ db.favorites.insert_many(books)
 def get_favorites():
     book_client = MongoClient('mongo')
     book_db = book_client.books
-    return book_db.favorites.find()
+    return dict(book_db.favorites.find())
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=int("5000"))
