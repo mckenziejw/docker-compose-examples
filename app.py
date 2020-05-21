@@ -30,14 +30,14 @@ books = [
     'title': 'Ham on Rye'
     }
 ]
-client = MongoClient('mongo', username='root', password='example')
+client = MongoClient('mongo', username='admin', password='lab123')
 db = client.books
 
 db.favorites.insert_many(books)
 
 @app.route('/')
 def get_favorites():
-    book_client = MongoClient('mongo', username='root', password='example')
+    book_client = MongoClient('mongo', username='admin', password='lab123')
     book_db = book_client.books
     return book_db.favorites.find()
 
