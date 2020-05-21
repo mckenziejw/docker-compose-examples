@@ -37,7 +37,7 @@ db.favorites.insert_many(books)
 
 @app.route('/')
 def get_favorites():
-    book_client = MongoClient('mongo')
+    book_client = MongoClient('mongo', username='root', password='example')
     book_db = book_client.books
     return book_db.favorites.find()
 
