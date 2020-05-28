@@ -8,8 +8,8 @@ services:
       - backend
   web:
     build: .
-    volume:
-      ./templates:/templates
+    volumes:
+      - ./templates:/templates
     restart: always
     environment:
       TEMPLATE_DIR: /templates
