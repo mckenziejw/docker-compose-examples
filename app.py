@@ -1,7 +1,11 @@
 import time
+import os
 from flask import Flask, request
 from pymongo import MongoClient
-app = Flask(__name__)
+
+template_path = os.environ.get('TEMPLATE_DIR')
+
+app = Flask(__name__, template_folder=template_path)
 
 ## Populate the mongodb
 books = [
@@ -30,7 +34,10 @@ books = [
     'title': 'Ham on Rye'
     }
 ]
+
+## Create a client instance
 client = MongoClient('mongo')
+
 db = client.books
 
 db.favorites.insert_many(books)
@@ -39,21 +46,21 @@ db.favorites.insert_many(books)
 def get_favorites():
     book_client = MongoClient('mongo')
     book_db = book_client.books
-    out = ''
+    books = []
     for entry in book_db.favorites.find():
-        out += str(entry)
-    return out
+        books.append(entry)
+    return render_template("index.html", books=books)
 
-@app.route('/add', methods=['POST'])
-def add_book():
-    new_book = request.json
-    if 'author' in new_book and 'title' in new_book:
-      book_client = MongoClient('mongo')
-      book_db = book_client.books
-      book_db.favorites.insert_one(new_book)
-      return "success"
-    else:
-      abort(400, message="Book not correctly formatted")
+# @app.route('/add', methods=['POST'])
+# def add_book():
+#     new_book = request.json
+#     if 'author' in new_book and 'title' in new_book:
+#       book_client = MongoClient('mongo')
+#       book_db = book_client.books
+#       book_db.favorites.insert_one(new_book)
+#       return "success"
+#     else:
+#       abort(400, message="Book not correctly formatted")
 
 
 if __name__ == '__main__':

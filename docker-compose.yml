@@ -8,6 +8,11 @@ services:
       - backend
   web:
     build: .
+    volume:
+      ./templates:/templates
+    restart: always
+    environment:
+      TEMPLATE_DIR: /templates
     ports:
       - "8080:5000"
     networks:
